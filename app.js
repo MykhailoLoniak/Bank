@@ -37,39 +37,3 @@ function tohtml(props) {
 }
 
 appCurs(); // Запуск функції для отримання та відображення курсів
-
-// Обробник події при виборі валюти зі списку
-htmlElement.onclick = (event) => {
-  const key = event.target.textContent;
-
-  if (!event.target.classList.contains('btm')) return;
-  if (selectedCourse.includes(key)) return;
-
-  selectedCourse.push(key); // Додавання обраної валюти до списку вибраних
-  console.log(selectedCourse);
-  calcRender(); // Оновлення відображення інпутів з вибраними валютами
-};
-
-// Генерація HTML для відображення інпутів з вибраними валютами
-function calcRender() {
-  let html = selectedCourse.map((i, index) => calcHtml(i, index)); // Генерація HTML для кожного інпуту
-  document.querySelector('.content').innerHTML = html.join(''); // Вставка згенерованого HTML у відповідний контейнер
-}
-
-// Обробник події при введенні суми у інпут
-function handleInputChange(event) {
-  const newValue = parseFloat(event.target.value) || 0;
-  const selectedCurrencyRate =
-    parseFloat(event.target.getAttribute('data-rate')) || 1;
-
-  // Оновлення значень інших інпутів згідно з курсами валют
-  document.querySelectorAll('input[type="text"]').forEach((inputElement) => {
-    if (inputElement !== event.target) {
-      const otherCurrencyRate =
-        parseFloat(inputElement.getAttribute('data-rate')) || 1;
-      const equivalentValue =
-        (newValue * otherCurrencyRate) / selectedCurrencyRate;
-      inputElement.value = equivalentValue.toFixed(2);
-    }
-  });
-}
